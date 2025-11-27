@@ -1,3 +1,4 @@
+from sqlmodel import Field
 from app.models.basemodel import BaseModel
 
 class User(BaseModel):
