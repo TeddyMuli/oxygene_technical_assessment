@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from app.models.bookmark import BookMark
 
 
-class Tag(BaseModel):
+class Tag(BaseModel, table=True):
     name: str = Field(unique=True, index=True)
 
     bookmarks: list["BookMark"] = Relationship(back_populates="tags", link_model=BookmarkTag)

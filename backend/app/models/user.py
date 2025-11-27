@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from app.models.bookmark import BookMark
 
-class User(BaseModel):
+class User(BaseModel, table=True):
     email: str = Field(unique=True, index=True)
     name: str
     password: str

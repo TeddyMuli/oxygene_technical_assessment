@@ -3,7 +3,7 @@ import uuid
 from typing import Optional
 from datetime import datetime, timezone, timedelta
 
-class BaseModel(SQLModel, table=True):
+class BaseModel(SQLModel):
     id: uuid.UUID = Field(
         default_factory=uuid.uuid4, 
         primary_key=True,

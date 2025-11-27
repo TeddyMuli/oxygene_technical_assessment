@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from app.models.tag import Tag
     from app.models.user import User
 
-class BookMark(BaseModel):
+class BookMark(BaseModel, table=True):
     title: str = Field(index=True)
     user_id: uuid.UUID  = Field(foreign_key="user.id")
     url: str
