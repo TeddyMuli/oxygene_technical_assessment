@@ -12,5 +12,5 @@ class BookMark(BaseModel):
     url: str
     description: str
 
-    user: Optional["User"] = Relationship(back_populates="bookmarks")
+    user: "User" = Relationship(back_populates="bookmarks")
     tags: list["Tag"] = Relationship(back_populates="bookmarks", link_model=BookmarkTag)
