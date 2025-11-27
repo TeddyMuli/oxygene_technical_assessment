@@ -1,7 +1,10 @@
 from sqlmodel import Field, Relationship
 from app.models.basemodel import BaseModel
+from app.models.bookmarktag import BookmarkTag
+from app.models.tag import Tag
 from app.models.user import User
 import uuid
+from typing import Optional
 
 class BookMark(BaseModel):
     title: str = Field(index=True)
@@ -9,4 +12,5 @@ class BookMark(BaseModel):
     url: str
     description: str
 
-    user: list["User"] = Relationship(back_populates="bookmarks")
+    user: Optional["User"] = Relationship(back_populates="bookmarks")
+    tags: list["Tag"] = Relationship(back_populates="bookmarks", link_model=BookmarkTag)
