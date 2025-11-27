@@ -1,14 +1,8 @@
 from sqlmodel import SQLModel, Field
-from typing import Optional
 import uuid
+from app.models.basemodel import BaseModel
 
-class User(SQLModel, table=True):
-    id: uuid.UUID = Field(
-        default_factory=uuid.uuid4, 
-        primary_key=True,
-        index=True,
-        nullable=False
-    )
+class User(BaseModel):
     email: str = Field(unique=True, index=True)
     name: str
     password: str
