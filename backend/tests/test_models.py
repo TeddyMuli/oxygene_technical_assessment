@@ -7,7 +7,7 @@ def test_create_bookmark_with_relationships(session):
     user = User(id=uuid.uuid4(), name="Test", email="test@test.com", password="hashed_pw")
     session.add(user)
     session.commit()
-    session.refresh()
+    session.refresh(user)
 
     tag_python = Tag(name="python")
     tag_coding = Tag(name="coding")
