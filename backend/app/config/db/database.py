@@ -4,7 +4,7 @@ from sqlmodel import Session, create_engine, SQLModel
 from app.config.config import settings
 from fastapi import Depends
 
-database_url = f"{settings.DATABASE_TYPE}://{settings.DATABASE_USER}:{settings.DATABASE_PASSWORD}@{settings.DATABASE_HOST}/{settings.DATABASE_NAME}?sslmode=require"
+database_url = f"{settings.DATABASE_TYPE}://{settings.DATABASE_USER}:{settings.DATABASE_PASSWORD}@{settings.DATABASE_HOST}:{settings.DATABASE_PORT}/{settings.DATABASE_NAME}?sslmode=require"
 
 engine = create_engine(database_url)
 

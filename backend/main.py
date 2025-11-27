@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.config.db.database import init_db
+from app.config.config import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -9,4 +10,4 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(title=settings.PROJECT_NAME, lifespan=lifespan)
