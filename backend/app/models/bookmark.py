@@ -1,10 +1,12 @@
 from sqlmodel import Field, Relationship
 from app.models.basemodel import BaseModel
 from app.models.bookmarktag import BookmarkTag
-from app.models.tag import Tag
-from app.models.user import User
 import uuid
-from typing import Optional
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.models.tag import Tag
+    from app.models.user import User
 
 class BookMark(BaseModel):
     title: str = Field(index=True)
