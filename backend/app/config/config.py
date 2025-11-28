@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     DATABASE_USER: Optional[str] = None
     DATABASE_HOST: Optional[str] = None
     DATABASE_TYPE: Optional[str] = None
+    SECRET_KEY: str = ""
+    ALGORITHM: str = ""
+    ACCESS_TOKEN_EXPIRE_MINUTES: float = 0
     
     class Config:
         env_file = ".env"
