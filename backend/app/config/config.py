@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = ""
     ALGORITHM: str = ""
     ACCESS_TOKEN_EXPIRE_MINUTES: float = 0
+    GEMINI_API_KEY: Optional[str] = None
     
     class Config:
         env_file = ".env"
