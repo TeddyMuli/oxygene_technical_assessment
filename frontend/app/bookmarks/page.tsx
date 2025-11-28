@@ -171,21 +171,7 @@ export default function BookmarksPage() {
             <Card className="mb-6">
               <CardContent className="pt-6">
                 <h3 className="font-semibold text-foreground mb-2 text-sm">AI Summary</h3>
-                <p className="text-foreground leading-relaxed text-sm">{selectedBookmark.aiSummary}</p>
-              </CardContent>
-            </Card>
-
-            <Card className="mb-6">
-              <CardContent className="pt-6">
-                <h3 className="font-semibold text-foreground mb-2 text-sm">Details</h3>
-                <p className="text-muted-foreground text-sm">
-                  Added on{" "}
-                  {new Date(selectedBookmark.createdAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </p>
+                <p className="text-foreground leading-relaxed text-sm">{selectedBookmark.ai_summary}</p>
               </CardContent>
             </Card>
 

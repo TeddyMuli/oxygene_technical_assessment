@@ -6,7 +6,7 @@ interface BookmarkCardProps {
     title: string
     url: string
     description: string
-    aiSummary: string
+    ai_summary: string
     createdAt: string
   }
 }
@@ -22,7 +22,7 @@ export function BookmarkCard({ bookmark }: BookmarkCardProps) {
         <p className="text-sm text-foreground mb-3">{bookmark.description}</p>
         <div className="bg-muted p-3 rounded-lg">
           <p className="text-xs font-medium text-muted-foreground mb-1">AI Summary</p>
-          <p className="text-sm text-foreground line-clamp-2">{bookmark.aiSummary}</p>
+          <p className="text-sm text-foreground line-clamp-2">{bookmark.ai_summary}</p>
         </div>
       </CardContent>
     </Card>

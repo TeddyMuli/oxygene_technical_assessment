@@ -118,7 +118,7 @@ export default function BookmarkDetailPage() {
             <CardDescription>Generated summary of this bookmark</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-foreground leading-relaxed">{(bookmark as unknown as ApiBookmark).aiSummary ?? (bookmark as unknown as ApiBookmark).aiSummary}</p>
+            <p className="text-foreground leading-relaxed">{(bookmark as unknown as ApiBookmark).ai_summary ?? (bookmark as unknown as ApiBookmark).ai_summary}</p>
           </CardContent>
         </Card>
 

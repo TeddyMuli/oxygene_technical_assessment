@@ -24,7 +24,7 @@ export interface Bookmark {
   title: string;
   url: string;
   description?: string;
-  aiSummary?: string;
+  ai_summary?: string;
   user_id: string;
   tags: Tag[];
   createdAt: string;
