@@ -62,11 +62,12 @@ Components:
 ## Tech Stack
 
 - Frontend
-    - Next.js 14
+    - Next.js 16
     - TypeScript, React
     - Server-Side Rendering (SSR)
 - Styling
     - Tailwind CSS
+    - Shancn UI
 - Backend
     - FastAPI (async support, automatic OpenAPI/Swagger docs)
 - ORM
@@ -74,29 +75,55 @@ Components:
 - Database
     - PostgreSQL
 - AI
-    - Gemini 1.5 Flash (text summarization)
+    - Gemini 2.5 Flash
 - DevOps
     - Docker & Docker Compose
+    - Render
+    - Vercel
 
 ## Getting Started
 
 Prerequisites:
 - Docker & Docker Compose
 - Google Gemini API key
+- Python
+- Nodejs
 
 Installation:
 1. Clone the repository:
      ```bash
-     git clone https://github.com/your-username/bookmark-manager.git
-     cd bookmark-manager
+     git clone https://github.com/TeddyMuli/oxygene_technical_assessment
+     cd oxygene_technical_assessment
      ```
-2. Create a `.env` file in the project root with:
-     ```env
-     GEMINI_API_KEY=your_google_gemini_key_here
-     ```
-3. Build and run with Docker Compose:
+2. Navigate into the Backend:
      ```bash
-     docker-compose up --build
+     cd backend
+     ```
+3. Create a secret key:
+     ```bash
+      openssl rand -base64 64 
+     ```
+4. Create an env file:
+     ```bash
+     cp .env.example .env
+     ```
+5. Add you environment variables
+6. Navigate into the Frontend:
+     ```bash
+     cd frontend
+     ```
+7. Create an env file:
+     ```bash
+     cp .env.local .env
+     ```
+8. Add your environment variables
+8. Run the backend:
+     ```bash
+     fastapi run main.py
+     ```
+9. Run the frontend:
+     ```bash
+     pnpm dev
      ```
 
 Access:
