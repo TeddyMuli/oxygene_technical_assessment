@@ -41,9 +41,7 @@ def get_my_tags(
 ):
     statement = (
         select(Tag)
-        .join(BookmarkTag)
-        .join(BookMark)
-        .where(BookMark.user_id == current_user.id)
+        .where(Tag.user_id == current_user.id)
         .distinct()
     )
     
@@ -64,12 +62,12 @@ def get_tag_details(
         select(BookMark)
         .join(BookmarkTag)
         .where(BookmarkTag.tag_id == tag_id)
-        .where(BookMark.user_id == current_user.id)
+        .where(Tag.user_id == current_user.id)
     )
     
     user_bookmarks = session.exec(statement).all()
     return TagReadWithBookmarks(
         id=tag.id,
         name=tag.name,
-        bookmarks=[BookmarkRead.from_orm(b) for b in user_bookmarks]
+        bookmarks=[BookmarkRead.model_validate(b) for b in user_bookmarks]
     )
