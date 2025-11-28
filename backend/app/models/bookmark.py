@@ -12,7 +12,8 @@ class BookMark(BaseModel, table=True):
     title: str = Field(index=True)
     user_id: uuid.UUID  = Field(foreign_key="user.id")
     url: str
-    description: str
+    description: str | None
+    ai_summary: str | None
 
     user: "User" = Relationship(back_populates="bookmarks")
     tags: list["Tag"] = Relationship(back_populates="bookmarks", link_model=BookmarkTag)
