@@ -1,0 +1,40 @@
+services:
+  backend:
+    build: ./backend
+    container_name: fastapi-backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_TYPE=${DATABASE_TYPE}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - SECRET_KEY=${SECRET_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    container_name: nextjs-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - INTERNAL_API_URL=http://backend:8000
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
