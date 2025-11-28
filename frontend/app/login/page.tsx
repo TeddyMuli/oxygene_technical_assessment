@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { login, getMe } from "@/data/api"
 import type { LoginRequest, User } from "@/data/types"
@@ -17,6 +17,15 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const router = useRouter()
+
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    const userData = localStorage.getItem("user")
+
+    if (token || userData) {
+      router.push("/bookmarks")
+    }
+  }, [router])
 
   const mutation = useMutation<User, Error, LoginRequest>({
     mutationFn: async (payload) => {

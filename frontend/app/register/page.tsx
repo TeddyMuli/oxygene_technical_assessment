@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useMutation } from "@tanstack/react-query"
 import { register } from "@/data/api"
 import type { RegisterRequest, User } from "@/data/types"
@@ -19,6 +19,16 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
   const router = useRouter()
+
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    const userData = localStorage.getItem("user")
+
+    if (token || userData) {
+      router.push("/bookmarks")
+    }
+  }, [router])
+  
   const mutation = useMutation<User, Error, RegisterRequest>({
     mutationFn: (payload) => register(process.env.NEXT_PUBLIC_API_URL ?? "", payload),
     onSuccess(data) {
