@@ -10,6 +10,10 @@ A full-stack, containerized microservices application that combines a React fron
 - Fronted - https://oxygene-bookmarks.vercel.app/
 - Backend - https://oxygene-bookmarks.onrender.com/docs
 
+## Docker Images
+- Frontend - https://hub.docker.com/repository/docker/teddymuli/bookmarks-frontend/general
+- Backend - https://hub.docker.com/repository/docker/teddymuli/bookmarks-backend/general
+
 ## Getting Started
 
 Prerequisites:
