@@ -10,11 +10,11 @@ A full-stack, containerized microservices application that combines a React fron
 
 I confirm that this submission is my own work. I have:
 
-- [ ] Not copied code from existing solutions or other candidates
-- [ ] Used AI assistants only for syntax help and debugging specific errors
-- [ ] Not received human help during the assignment period
-- [ ] Built the core logic and architecture myself
-- [ ] Cited any references used for specific solutions
+- [x] Not copied code from existing solutions or other candidates
+- [x] Used AI assistants only for syntax help and debugging specific errors
+- [x] Not received human help during the assignment period
+- [x] Built the core logic and architecture myself
+- [x] Cited any references used for specific solutions
 
 ## Architecture
 
