@@ -57,13 +57,13 @@ export const createBookmark = (apiUrl: string, token: string, data: BookmarkCrea
 export const getBookmarks = (apiUrl: string, token: string, skip = 0, limit = 100) => 
   request<Bookmark[]>(`${apiUrl}/bookmarks/?skip=${skip}&limit=${limit}`, 'GET', undefined, token);
 
-export const getBookmark = (apiUrl: string, token: string, bookmarkId: number) => 
+export const getBookmark = (apiUrl: string, token: string, bookmarkId: string) => 
   request<Bookmark>(`${apiUrl}/bookmarks/${bookmarkId}`, 'GET', undefined, token);
 
-export const updateBookmark = (apiUrl: string, token: string, bookmarkId: number, data: BookmarkUpdate) => 
+export const updateBookmark = (apiUrl: string, token: string, bookmarkId: string, data: BookmarkUpdate) => 
   request<Bookmark>(`${apiUrl}/bookmarks/${bookmarkId}`, 'PATCH', data, token);
 
-export const deleteBookmark = (apiUrl: string, token: string, bookmarkId: number) => 
+export const deleteBookmark = (apiUrl: string, token: string, bookmarkId: string) => 
   request<{ ok: boolean }>(`${apiUrl}/bookmarks/${bookmarkId}`, 'DELETE', undefined, token);
 
 export const createTag = (apiUrl: string, token: string, data: TagCreate) => 
@@ -72,11 +72,11 @@ export const createTag = (apiUrl: string, token: string, data: TagCreate) =>
 export const getTags = (apiUrl: string, token: string) => 
   request<Tag[]>(`${apiUrl}/tags/`, 'GET', undefined, token);
 
-export const getTag = (apiUrl: string, token: string, tagId: number | string) => 
+export const getTag = (apiUrl: string, token: string, tagId: string) => 
   request<Tag>(`${apiUrl}/tags/${tagId}`, 'GET', undefined, token);
 
-export const updateTag = (apiUrl: string, token: string, tagId: number | string, data: TagUpdate) => 
+export const updateTag = (apiUrl: string, token: string, tagId: string, data: TagUpdate) => 
   request<Tag>(`${apiUrl}/tags/${tagId}`, 'PATCH', data, token);
 
-export const deleteTag = (apiUrl: string, token: string, tagId: number | string) => 
+export const deleteTag = (apiUrl: string, token: string, tagId: string) => 
   request<{ ok: boolean }>(`${apiUrl}/tags/${tagId}`, 'DELETE', undefined, token);

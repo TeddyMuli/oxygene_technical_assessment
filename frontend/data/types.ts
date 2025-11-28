@@ -1,4 +1,3 @@
-// --- Auth Types ---
 export interface TokenResponse {
   access_token: string;
   token_type: string;
@@ -12,38 +11,37 @@ export interface LoginRequest {
 export interface RegisterRequest {
   email: string;
   password: string;
-  full_name?: string;
+  name?: string;
 }
 
-// --- Model Types ---
 export interface Tag {
-  id: number; // or string if you switched to UUID
+  id: string;
   name: string;
 }
 
 export interface Bookmark {
-  id: number;
+  id: string;
   title: string;
   url: string;
   description?: string;
-  ai_summary?: string;
+  aiSummary?: string;
   user_id: string;
   tags: Tag[];
+  createdAt: string;
 }
 
 export interface User {
   id: string;
   email: string;
-  full_name?: string;
+  name?: string;
   bookmarks: Bookmark[];
 }
 
-// --- Input Types (for creation/updates) ---
 export interface BookmarkCreate {
   title: string;
   url: string;
   description?: string;
-  tags: string[]; // Frontend sends ["python", "api"] strings
+  tags: string[];
 }
 
 export interface BookmarkUpdate {

@@ -16,42 +16,40 @@ export default function BookmarksPage() {
 
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null
 
-  const { data: bookmarks = [] } = useQuery<ApiBookmark[], Error>(["bookmarks"], () =>
-    getBookmarks(process.env.NEXT_PUBLIC_API_URL ?? "", token as string),
-    { enabled: !!token },
-  )
+  const { data: bookmarks = [] } = useQuery<ApiBookmark[], Error>({
+    queryKey: ["bookmarks"],
+    queryFn: () => getBookmarks(process.env.NEXT_PUBLIC_API_URL ?? "", token as string),
+    enabled: !!token,
+  })
 
   const queryClient = useQueryClient()
 
-  const createMutation = useMutation<ApiBookmark, Error, BookmarkCreate>((payload) =>
-    createBookmark(process.env.NEXT_PUBLIC_API_URL ?? "", token as string, payload),
-    {
-      onSuccess() {
-        queryClient.invalidateQueries(["bookmarks"])
-        setIsAddModalOpen(false)
-      },
+  const createMutation = useMutation<ApiBookmark, Error, BookmarkCreate>({
+    mutationFn: (payload: BookmarkCreate) =>
+      createBookmark(process.env.NEXT_PUBLIC_API_URL ?? "", token as string, payload),
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ["bookmarks"] })
+      setIsAddModalOpen(false)
     },
-  )
+  })
 
-  const updateMutation = useMutation<ApiBookmark, Error, { id: string; data: BookmarkUpdate }>(({ id, data }) =>
-    updateBookmark(process.env.NEXT_PUBLIC_API_URL ?? "", token as string, Number(id), data),
-    {
-      onSuccess() {
-        queryClient.invalidateQueries(["bookmarks"])
-        setIsEditingDetail(false)
-      },
+  const updateMutation = useMutation<ApiBookmark, Error, { id: string; data: BookmarkUpdate }>({
+    mutationFn: ({ id, data }: { id: string; data: BookmarkUpdate }) =>
+      updateBookmark(process.env.NEXT_PUBLIC_API_URL ?? "", token as string, id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["bookmarks"] })
+      setIsEditingDetail(false)
     },
-  )
+  })
 
-  const deleteMutation = useMutation<void, Error, string>((id) =>
-    deleteBookmark(process.env.NEXT_PUBLIC_API_URL ?? "", token as string, Number(id)),
-    {
-      onSuccess() {
-        queryClient.invalidateQueries(["bookmarks"])
-        setSelectedBookmarkId(null)
-      },
+  const deleteMutation = useMutation<{ ok: boolean }, Error, string>({
+    mutationFn: (id: string) =>
+      deleteBookmark(process.env.NEXT_PUBLIC_API_URL ?? "", token as string, id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["bookmarks"] })
+      setSelectedBookmarkId(null)
     },
-  )
+  })
 
   const filteredBookmarks = (bookmarks as ApiBookmark[]).filter(
     (bookmark) =>

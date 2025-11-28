@@ -83,9 +83,9 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                disabled={mutation.isLoading}
+                disabled={mutation.isPending}
               >
-                {mutation.isLoading ? "Loading..." : "Log In"}
+                {mutation.isPending ? "Loading..." : "Log In"}
               </Button>
             </form>
 

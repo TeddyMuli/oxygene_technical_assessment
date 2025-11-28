@@ -16,16 +16,17 @@ export default function BookmarkDetailPage() {
 
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null
 
-  const { data: bookmark, isLoading } = useQuery<any, any>(["bookmark", id], () =>
-    getBookmark(process.env.NEXT_PUBLIC_API_URL ?? "", token as string, Number(id)),
-    { enabled: !!token && !!id },
-  )
+  const { data: bookmark, isLoading } = useQuery<ApiBookmark, Error>({
+    queryKey: ["bookmark", id],
+    queryFn: () => getBookmark(process.env.NEXT_PUBLIC_API_URL ?? "", token as string, id),
+    enabled: !!token && !!id,
+  })
 
   const queryClient = useQueryClient()
 
   const updateMutation = useMutation<ApiBookmark, Error, { id: string; data: BookmarkUpdate }>({
     mutationFn: ({ id, data }) =>
-      updateBookmark(process.env.NEXT_PUBLIC_API_URL ?? "", token as string, Number(id), data),
+      updateBookmark(process.env.NEXT_PUBLIC_API_URL ?? "", token as string, id, data),
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ["bookmarks"] })
       queryClient.invalidateQueries({ queryKey: ["bookmark", id] })
@@ -33,7 +34,7 @@ export default function BookmarkDetailPage() {
   })
 
   const deleteMutation = useMutation<{ ok: boolean }, Error, string>({
-    mutationFn: (id) => deleteBookmark(process.env.NEXT_PUBLIC_API_URL ?? "", token as string, Number(id)),
+    mutationFn: (id) => deleteBookmark(process.env.NEXT_PUBLIC_API_URL ?? "", token as string, id),
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ["bookmarks"] })
     },
@@ -117,7 +118,7 @@ export default function BookmarkDetailPage() {
             <CardDescription>Generated summary of this bookmark</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-foreground leading-relaxed">{(bookmark as unknown as ApiBookmark).ai_summary ?? (bookmark as unknown as ApiBookmark).aiSummary}</p>
+            <p className="text-foreground leading-relaxed">{(bookmark as unknown as ApiBookmark).aiSummary ?? (bookmark as unknown as ApiBookmark).aiSummary}</p>
           </CardContent>
         </Card>
 

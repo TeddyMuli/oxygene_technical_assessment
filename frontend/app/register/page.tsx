@@ -39,7 +39,7 @@ export default function RegisterPage() {
       return
     }
 
-    mutation.mutate({ email, password, full_name: name })
+    mutation.mutate({ email, password, name: name })
   }
 
   return (
@@ -106,9 +106,9 @@ export default function RegisterPage() {
               <Button
                 type="submit"
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                disabled={mutation.isLoading}
+                disabled={mutation.isPending}
               >
-                {mutation.isLoading ? "Creating..." : "Create Account"}
+                {mutation.isPending ? "Creating..." : "Create Account"}
               </Button>
             </form>
 
