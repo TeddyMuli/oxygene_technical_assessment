@@ -37,19 +37,19 @@ async function request<T>(
 }
 
 export const register = (apiUrl: string, data: RegisterRequest) => 
-  request<User>(`${apiUrl}/auth/register`, 'POST', data);
+  request<User>(`${apiUrl}/register`, 'POST', data);
 
 export const login = (apiUrl: string, data: LoginRequest) => 
-  request<TokenResponse>(`${apiUrl}/auth/login`, 'POST', data);
+  request<TokenResponse>(`${apiUrl}/login`, 'POST', data);
 
 export const getMe = (apiUrl: string, token: string) => 
-  request<User>(`${apiUrl}/users/me`, 'GET', undefined, token);
+  request<User>(`${apiUrl}/me`, 'GET', undefined, token);
 
 export const updateMe = (apiUrl: string, token: string, data: UserUpdate) => 
-  request<User>(`${apiUrl}/users/me`, 'PATCH', data, token);
+  request<User>(`${apiUrl}/me`, 'PATCH', data, token);
 
 export const deleteMe = (apiUrl: string, token: string) => 
-  request<{ ok: boolean }>(`${apiUrl}/users/me`, 'DELETE', undefined, token);
+  request<{ ok: boolean }>(`${apiUrl}/me`, 'DELETE', undefined, token);
 
 export const createBookmark = (apiUrl: string, token: string, data: BookmarkCreate) => 
   request<Bookmark>(`${apiUrl}/bookmarks/`, 'POST', data, token);
