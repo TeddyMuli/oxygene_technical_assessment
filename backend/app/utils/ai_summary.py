@@ -10,10 +10,14 @@ from sqlmodel import Session
 
 client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
-def get_website_text(url: str) -> str | None:
+async def get_website_text(url: str) -> str | None:    
     try:
-        with httpx.Client(follow_redirects=True) as client:
-            response = client.get(url, timeout=10.0)
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+        }
+
+        async with httpx.AsyncClient(follow_redirects=True, headers=headers) as client:
+            response = await client.get(url, timeout=10.0)
             response.raise_for_status()
             
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -32,7 +36,7 @@ def get_website_text(url: str) -> str | None:
         return None
 
 async def generate_summary(url: str) -> str | None:
-    text_content = get_website_text(url)
+    text_content = await get_website_text(url)
     
     if not text_content:
         raise HTTPException(status_code=400, detail="Could not extract content from URL")
