@@ -7,23 +7,25 @@ from app.config.db.database import get_session
 from app.models.user import User
 from app.utils.security import get_password_hash, create_access_token
 import uuid
+from unittest.mock import patch
 
 TEST_DATABASE_URL = "sqlite:///:memory:"
 
+test_engine = create_engine(
+    TEST_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
+)
+
 @pytest.fixture(name="session")
 def session_fixture():
-    engine = create_engine(
-        TEST_DATABASE_URL,
-        connect_args={"check_same_thread": False},
-        poolclass=StaticPool
-    )
-
-    SQLModel.metadata.create_all(engine)
-
-    with Session(engine) as session:
-        yield session
-
-    SQLModel.metadata.drop_all(engine)
+    SQLModel.metadata.create_all(test_engine)
+    
+    with patch("app.config.db.database.engine", test_engine):
+        with Session(test_engine) as session:
+            yield session
+            
+    SQLModel.metadata.drop_all(test_engine)
 
 @pytest.fixture(name="client")
 def client_fixture(session: Session):

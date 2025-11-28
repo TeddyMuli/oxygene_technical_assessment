@@ -1,6 +1,7 @@
 from app.models.bookmark import BookMark
 from app.models.tag import Tag
 from sqlmodel import select
+import uuid
 
 def test_create_bookmark(client, session, auth_headers):
     payload = {
@@ -14,28 +15,28 @@ def test_create_bookmark(client, session, auth_headers):
     assert response.status_code == 200
     data = response.json()
     assert data["title"] == "FastAPI Docs"
-    assert data["ai_response"] is str
+    assert isinstance(data["ai_summary"], str)
     assert len(data["tags"]) == 2
     
     db_tags = session.exec(select(Tag)).all()
     assert len(db_tags) == 2
 
 def test_read_bookmarks(client, auth_headers):
-    client.post("/bookmarks/", json={"title": "B1", "url": "u1", "tags": []}, headers=auth_headers)
-    client.post("/bookmarks/", json={"title": "B2", "url": "u2", "tags": []}, headers=auth_headers)
+    client.post("/bookmarks/", json={"title": "B1", "url": "https://python.org", "tags": []}, headers=auth_headers)
+    client.post("/bookmarks/", json={"title": "B2", "url": "https://example.com", "tags": []}, headers=auth_headers)
     
     response = client.get("/bookmarks/", headers=auth_headers)
     assert len(response.json()) == 2
 
 def test_read_bookmark_privacy(client, auth_headers, other_user_headers):
-    create_res = client.post("/bookmarks/", json={"title": "Secret", "url": "u1"}, headers=auth_headers)
+    create_res = client.post("/bookmarks/", json={"title": "Secret", "url": "https://python.org"}, headers=auth_headers)
     bookmark_id = create_res.json()["id"]
     
     response = client.get(f"/bookmarks/{bookmark_id}", headers=other_user_headers)
     assert response.status_code == 403
 
 def test_update_bookmark(client, auth_headers):
-    create_res = client.post("/bookmarks/", json={"title": "Old", "url": "u1", "tags": ["old"]}, headers=auth_headers)
+    create_res = client.post("/bookmarks/", json={"title": "Old", "url": "https://python.org", "tags": ["old"]}, headers=auth_headers)
     b_id = create_res.json()["id"]
     
     update_payload = {
@@ -50,10 +51,11 @@ def test_update_bookmark(client, auth_headers):
     assert data["tags"][0]["name"] == "new"
 
 def test_delete_bookmark(client, session, auth_headers):
-    create_res = client.post("/bookmarks/", json={"title": "Del", "url": "u1"}, headers=auth_headers)
-    b_id = create_res.json()["id"]
+    create_res = client.post("/bookmarks/", json={"title": "Del", "url": "https://python.org"}, headers=auth_headers)
+    b_id_str = create_res.json()["id"]
     
-    response = client.delete(f"/bookmarks/{b_id}", headers=auth_headers)
+    response = client.delete(f"/bookmarks/{b_id_str}", headers=auth_headers)
     assert response.status_code == 200
     
-    assert session.get(BookMark, b_id) is None
+    b_id_uuid = uuid.UUID(b_id_str)
+    assert session.get(BookMark, b_id_uuid) is None

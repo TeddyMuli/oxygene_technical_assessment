@@ -1,6 +1,6 @@
 def test_register_user(client):
     response = client.post(
-        "/auth/register",
+        "/register",
         json={"email": "new@test.com", "password": "password123", "name": "test"}
     )
     assert response.status_code == 200
@@ -10,15 +10,15 @@ def test_register_user(client):
     assert data["name"] == "test"
 
 def test_register_duplicate_email(client):
-    client.post("/auth/register", json={"email": "dup@test.com", "password": "123", "name": "duplicate"})
-    response = client.post("/auth/register", json={"email": "dup@test.com", "password": "123", "name": "duplicate"})
+    client.post("/register", json={"email": "dup@test.com", "password": "123", "name": "duplicate"})
+    response = client.post("/register", json={"email": "dup@test.com", "password": "123", "name": "duplicate"})
     assert response.status_code == 400
 
 def test_login_success(client):
-    client.post("/auth/register", json={"email": "login@test.com", "password": "123", "name": "login test"})
+    client.post("/register", json={"email": "login@test.com", "password": "123", "name": "login test"})
     
     response = client.post(
-        "/auth/login",
+        "/login",
         json={"email": "login@test.com", "password": "123"}
     )
     assert response.status_code == 200
@@ -26,7 +26,7 @@ def test_login_success(client):
 
 def test_login_fail(client):
     response = client.post(
-        "/auth/login",
+        "/login",
         json={"email": "wrong@test.com", "password": "wrong"}
     )
     assert response.status_code == 401
@@ -34,7 +34,7 @@ def test_login_fail(client):
 from app.models.user import User
 from sqlmodel import select
 def test_read_current_user(client, auth_headers):
-    response = client.get("/users/me", headers=auth_headers)
+    response = client.get("/me", headers=auth_headers)
     
     assert response.status_code == 200
     data = response.json()
@@ -44,7 +44,7 @@ def test_read_current_user(client, auth_headers):
     
 def test_update_me(client, session, auth_headers):
     response = client.patch(
-        "/users/me",
+        "/me",
         json={"email": "updated@test.com"},
         headers=auth_headers
     )
@@ -56,14 +56,14 @@ def test_update_me(client, session, auth_headers):
 
 def test_update_me_duplicate_email_fail(client, auth_headers, other_user_headers):
     response = client.patch(
-        "/users/me",
+        "/me",
         json={"email": "user_b@test.com"},
         headers=auth_headers
     )
     assert response.status_code == 400
 
 def test_delete_me(client, session, auth_headers):
-    response = client.delete("/users/me", headers=auth_headers)
+    response = client.delete("/me", headers=auth_headers)
     assert response.status_code == 200
     
     user = session.exec(select(User).where(User.email == "user_a@test.com")).first()

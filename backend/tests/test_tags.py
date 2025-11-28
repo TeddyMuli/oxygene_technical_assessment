@@ -1,13 +1,13 @@
+import uuid
 from app.models.tag import Tag
-from sqlmodel import select
 
 def test_create_tag_explicit(client, session, auth_headers):
     response = client.post("/tags/", json={"name": "Explicit Tag"}, headers=auth_headers)
     assert response.status_code == 200
-    assert response.json()["name"] == "explicit tag" # Checks lowercase logic
+    assert response.json()["name"] == "explicit tag"
 
 def test_read_my_tags(client, auth_headers):
-    client.post("/bookmarks/", json={"title": "B1", "url": "u1", "tags": ["python"]}, headers=auth_headers)
+    client.post("/bookmarks/", json={"title": "B1", "url": "https://example.com", "tags": ["python"]}, headers=auth_headers)
     client.post("/tags/", json={"name": "rust"}, headers=auth_headers)
     
     response = client.get("/tags/", headers=auth_headers)
@@ -18,8 +18,8 @@ def test_read_my_tags(client, auth_headers):
     assert "rust" in names
 
 def test_read_tag_details(client, auth_headers):
-    client.post("/bookmarks/", json={"title": "B1", "url": "u1", "tags": ["python"]}, headers=auth_headers)
-    client.post("/bookmarks/", json={"title": "B2", "url": "u2", "tags": ["python"]}, headers=auth_headers)
+    client.post("/bookmarks/", json={"title": "B1", "url": "https://example.com", "tags": ["python"]}, headers=auth_headers)
+    client.post("/bookmarks/", json={"title": "B2", "url": "https://example.com", "tags": ["python"]}, headers=auth_headers)
     
     tags_list = client.get("/tags/", headers=auth_headers).json()
     tag_id = tags_list[0]["id"]
@@ -38,8 +38,11 @@ def test_rename_tag(client, auth_headers):
 
 def test_delete_tag(client, session, auth_headers):
     create = client.post("/tags/", json={"name": "waste"}, headers=auth_headers)
-    t_id = create.json()["id"]
+    t_id_str = create.json()["id"]
     
-    response = client.delete(f"/tags/{t_id}", headers=auth_headers)
+    response = client.delete(f"/tags/{t_id_str}", headers=auth_headers)
+
     assert response.status_code == 200
-    assert session.get(Tag, t_id) is None
+
+    t_id_uuid = uuid.UUID(t_id_str)
+    assert session.get(Tag, t_id_uuid) is None
