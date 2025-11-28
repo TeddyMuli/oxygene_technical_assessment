@@ -76,6 +76,7 @@ Components:
     - Docker and Docker Compose for consistent development and deployment
     - Render for the backend
     - Vercel for the frontend
+    - Aiven for the live database
 
 ## Data Model
 
