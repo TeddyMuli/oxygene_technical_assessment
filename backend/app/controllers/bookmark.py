@@ -2,7 +2,6 @@ import uuid
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import select
-from fastapi import BackgroundTasks
 from app.config.db.database import get_session, Session
 from app.models.bookmark import BookMark
 from app.models.user import User
@@ -13,32 +12,30 @@ from app.schemas.bookmark import (
 )
 from app.controllers.user import get_current_user
 from app.controllers.tag import process_tags
-from app.utils.ai_summary import bg_generate_summary
+from app.utils.ai_summary import generate_summary
 
 router = APIRouter(prefix="/bookmarks", tags=["Bookmarks"])
 
 @router.post("/", response_model=BookmarkReadWithTags)
 async def create_bookmark(
     bookmark_in: BookmarkCreate,
-    background_tasks: BackgroundTasks,
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user)
 ):
     tag_objects = process_tags(session, bookmark_in.tags, current_user.id)
-
+    ai_summary = await generate_summary(bookmark_in.url)
     bookmark = BookMark(
         title=bookmark_in.title,
         url=bookmark_in.url,
         description=bookmark_in.description,
         user_id=current_user.id,
         tags=tag_objects,
-        ai_summary="Generating ai summary..."
+        ai_summary=ai_summary
     )
 
     session.add(bookmark)
     session.commit()
     session.refresh(bookmark)
-    background_tasks.add_task(bg_generate_summary, bookmark.id, bookmark.url)
     return bookmark
 
 @router.get("/", response_model=List[BookmarkReadWithTags])
