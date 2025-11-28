@@ -22,8 +22,7 @@ export default function RegisterPage() {
   const mutation = useMutation<User, Error, RegisterRequest>({
     mutationFn: (payload) => register(process.env.NEXT_PUBLIC_API_URL ?? "", payload),
     onSuccess(data) {
-      localStorage.setItem("user", JSON.stringify(data))
-      router.push("/bookmarks")
+      router.push("/login")
     },
     onError(err) {
       setError(err?.message ?? "Registration failed")
