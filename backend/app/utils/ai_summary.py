@@ -1,10 +1,14 @@
-import os
+import uuid
 import httpx
 from bs4 import BeautifulSoup
 from fastapi import HTTPException
 from google import genai
+from app.config.config import settings
+from app.config.db import database
+from app.models.bookmark import BookMark
+from sqlmodel import Session
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
 def get_website_text(url: str) -> str | None:
     try:
@@ -49,3 +53,16 @@ async def generate_summary(url: str) -> str | None:
         return response.text
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Gemini API Error: {str(e)}")
+
+async def bg_generate_summary(bookmark_id: uuid.UUID, url: str):
+    try:
+        summary_text = await generate_summary(url)
+    except Exception as e:
+        return
+
+    with Session(database.engine) as session:
+        bookmark = session.get(BookMark, bookmark_id)
+        if bookmark:
+            bookmark.ai_summary = summary_text
+            session.add(bookmark)
+            session.commit()

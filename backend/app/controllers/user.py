@@ -9,9 +9,10 @@ from app.config.config import settings
 from jose import JWTError, jwt
 from fastapi.security import OAuth2PasswordBearer
 from app.schemas.user import UserUpdate
+import uuid
 
 router = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 async def get_current_user(
     token: Annotated[str, Depends(oauth2_scheme)],
@@ -27,7 +28,8 @@ async def get_current_user(
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         
-        user_id: str | Any = payload.get("sub")
+        user_id_str: str | Any = payload.get("sub")
+        user_id = uuid.UUID(user_id_str)
         
         if user_id is None:
             raise credentials_exception

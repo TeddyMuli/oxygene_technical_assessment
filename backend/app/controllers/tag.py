@@ -50,7 +50,7 @@ def get_my_tags(
 
 @router.get("/{tag_id}", response_model=TagReadWithBookmarks)
 def get_tag_details(
-    tag_id: int,
+    tag_id: uuid.UUID,
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):
@@ -74,7 +74,7 @@ def get_tag_details(
 
 @router.patch("/{tag_id}", response_model=TagRead)
 def update_tag(
-    tag_id: int,
+    tag_id: uuid.UUID,
     tag_in: TagUpdate,
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user),
@@ -97,7 +97,7 @@ def update_tag(
 
 @router.delete("/{tag_id}")
 def delete_tag(
-    tag_id: int,
+    tag_id: uuid.UUID,
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):

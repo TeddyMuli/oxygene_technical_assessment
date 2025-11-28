@@ -1,7 +1,6 @@
 import uuid
 from typing import List, Optional
 from sqlmodel import SQLModel
-from app.schemas.tag import TagRead
 
 class BookmarkBase(SQLModel):
     title: str
@@ -20,6 +19,8 @@ class BookmarkUpdate(SQLModel):
 class BookmarkRead(BookmarkBase):
     id: uuid.UUID
     user_id: uuid.UUID
+    ai_summary: Optional[str] = None
 
+from app.schemas.tag import TagRead
 class BookmarkReadWithTags(BookmarkRead):
     tags: List[TagRead] = []
