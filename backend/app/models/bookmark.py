@@ -2,7 +2,7 @@ from sqlmodel import Field, Relationship
 from app.models.basemodel import BaseModel
 from app.models.bookmarktag import BookmarkTag
 import uuid
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from app.models.tag import Tag
@@ -12,7 +12,8 @@ class BookMark(BaseModel, table=True):
     title: str = Field(index=True)
     user_id: uuid.UUID  = Field(foreign_key="user.id")
     url: str
-    description: str
+    description: str | None
+    ai_summary: Optional[str]
 
     user: "User" = Relationship(back_populates="bookmarks")
     tags: list["Tag"] = Relationship(back_populates="bookmarks", link_model=BookmarkTag)
