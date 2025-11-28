@@ -71,3 +71,63 @@ def get_tag_details(
         name=tag.name,
         bookmarks=[BookmarkRead.model_validate(b) for b in user_bookmarks]
     )
+
+@router.patch("/{tag_id}", response_model=TagRead)
+def update_tag(
+    tag_id: int,
+    tag_in: TagUpdate,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    tag = session.get(Tag, tag_id)
+    if not tag:
+        raise HTTPException(status_code=404, detail="Tag not found")
+        
+    if tag_in.name:
+        existing = session.exec(select(Tag).where(Tag.name == tag_in.name)).first()
+        if existing and existing.id != tag_id:
+             raise HTTPException(status_code=400, detail="Tag with this name already exists")
+        
+        tag.name = tag_in.name
+        session.add(tag)
+        session.commit()
+        session.refresh(tag)
+        
+    return tag
+
+@router.delete("/{tag_id}")
+def delete_tag(
+    tag_id: int,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    tag = session.get(Tag, tag_id)
+    if not tag:
+        raise HTTPException(status_code=404, detail="Tag not found")
+        
+    session.delete(tag)
+    session.commit()
+    
+    return {"ok": True, "message": "Tag deleted"}
+
+@router.post("/", response_model=TagRead)
+def create_tag(
+    tag_in: TagCreate,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    clean_name = tag_in.name.lower().strip()
+    existing_tag = session.exec(
+        select(Tag)
+        .where(Tag.user_id == current_user.id)
+        .where(Tag.name == clean_name)
+    ).first()
+
+    if existing_tag:
+        return existing_tag
+
+    tag = Tag(name=clean_name, user_id=current_user.id)
+    session.add(tag)
+    session.commit()
+    session.refresh(tag)
+    return tag
