@@ -31,6 +31,8 @@ Components:
     - Google Gemini API for content summarization
 - DevOps
     - Docker and Docker Compose for consistent development and deployment
+    - Render for the backend
+    - Vercel for the frontend
 
 ## Data Model
 
