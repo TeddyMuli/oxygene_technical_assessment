@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from jose import jwt
 from app.config.config import settings
 
-pwd_context = CryptContext(schemas=["bcrypt"], deprecated=True)
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
