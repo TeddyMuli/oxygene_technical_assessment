@@ -156,6 +156,29 @@ docker-compose exec backend bash
 pytest
 ```
 
+## Production Roadmap
+The current implementation has a few challenges, namely:
+1. Weak authentication
+ - The user can create a very weak password.
+ - The token is stored in local storage.
+ - The token lasts for a week rather than a short time with refresh tokens.
+2. Poor user experience.
+ - The user has to create the description and tags
+3. Poor perfomance
+ - The api calls are slow
+ - The AI response is slow
+
+Suggested fixes in a production environemnt.
+1. Authentication
+ - Robust validation system to ensure users create strong passwords.
+ - Creation of short lived refresh tokens
+ - Save the tokens in secure http-only cookies
+2. User experience
+ - Allow the user to just enter a url and generate the title, description and tags.
+3. Perfomance
+ - Use of production grade servers.
+ - Use of queues and background tasks for AI calls
+
 ## Honesty Declaration
 
 I confirm that this submission is my own work. I have:
