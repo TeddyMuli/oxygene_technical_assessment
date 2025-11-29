@@ -27,7 +27,7 @@ export interface Bookmark {
   ai_summary?: string;
   user_id: string;
   tags: Tag[];
-  createdAt: string;
+  created_at: string;
 }
 
 export interface User {
